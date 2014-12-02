@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 Tlenitel 2000
 ==================================
 
-This application created for quizes on radion anison.fm
+This application created for quizes on radion anison.fm<br>
 Tlenitel 2000 difficult to find images in google search.
 
 Dependencies:
@@ -16,12 +15,5 @@ cd libtlen
 make
 ````
 
-Written by SergeyDenisov for Anison.fm.
-
+Written by SergeyDenisov for Anison.fm.<br>
 GPL3 license, all text above must be included in any redistribution
-=======
-tlenitel2000
-============
-
-Tlenization for images
->>>>>>> 2515db3c15b23763adf13ecd56330972d76150c2
