@@ -1,7 +1,7 @@
 Tlenitel 2000
 ==================================
 
-This application created for quizes on radion anison.fm<br>
+This application created for quizes on radio anison.fm<br>
 Tlenitel 2000 difficult to find images in google search.
 
 Dependencies:
