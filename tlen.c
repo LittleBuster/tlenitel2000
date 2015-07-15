@@ -26,7 +26,7 @@ void tlen_image(const char *in_file, const char *templ_file, const char *result_
     int x = 0;
     int y = 0;
     IplImage* dst;
-    IplImage* image;
+    IplImage* image, *gray_image;
     IplImage* templ;
     IplImage* new_templ;
     int width, height;
@@ -54,10 +54,16 @@ void tlen_image(const char *in_file, const char *templ_file, const char *result_
     cvAddWeighted(image, alpha, new_templ, beta, 0.0, dst);
     /* Free area */
     cvResetImageROI(image);
-    cvSaveImage(result_file, dst, NULL);
+
+    /* Set black-white image */
+    gray_image = cvCreateImage(cvSize(image->width,image->height), 8, 1);
+    cvCvtColor(dst, gray_image, CV_RGB2GRAY);
+
+    cvSaveImage(result_file, gray_image, NULL);
 
     /* Fre memory */
     cvReleaseImage(&image);
+    cvReleaseImage(&gray_image);
     cvReleaseImage(&templ);
     cvReleaseImage(&new_templ);
     cvReleaseImage(&dst);

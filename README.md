@@ -10,7 +10,7 @@ Dependencies:<br>
 apt install libopencv-dev libgtk-3-dev
 ````
 <br>
-<img width="450" src="http://s017.radikal.ru/i441/1507/eb/3411899f8a68.png" />
+<img width="450" src="http://s018.radikal.ru/i509/1507/ca/bf845b029766.png" />
 
 Written by SergeyDenisov<br>
 GPL3 license, all text above must be included in any redistribution
