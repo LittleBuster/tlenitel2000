@@ -1,19 +1,16 @@
 Tlenitel 2000
 ==================================
 
-This application created for quizes on radio anison.fm<br>
+This application created tlenization images<br>
 Tlenitel 2000 difficult to find images in google search.
 
-Dependencies:
+Dependencies:<br>
+<b>Ubuntu</b>
 ````
-MinGW32, MSSYS, OpenCV library, Python 3.4, PyQt4
+apt install libopencv-dev libgtk-3-dev libjansson-dev
 ````
+<br>
+<img src="http://s017.radikal.ru/i441/1507/eb/3411899f8a68.png" />
 
-To make libtlen you need write:
-````
-cd libtlen
-make
-````
-
-Written by SergeyDenisov for Anison.fm.<br>
+Written by SergeyDenisov<br>
 GPL3 license, all text above must be included in any redistribution
