@@ -10,7 +10,7 @@ tlenitel: main.o mainwnd.o
 	$(CC) -fPIC -c tlen.c -o tlen.o $(CFLAGS) $(LDFLAGS2)
 	$(CC) -shared tlen.o -o libtlen.so $(CFLAGS) $(LDFLAGS2)
 	#Application
-	$(CC) main.o mainwnd.o -o tlenitel $(CFLAGS) $(LDFLAGS) $(LDFLAGS2) $(LDFLAGS3) -ldl
+	$(CC) main.o mainwnd.o -o tlenitel $(CFLAGS) $(LDFLAGS) $(LDFLAGS2) -ldl
 	strip tlenitel
 	mkdir bin
 	mv tlenitel bin/
@@ -22,7 +22,7 @@ main.o: main.c
 	$(CC) -c main.c $(CFLAGS) $(LDFLAGS)
 
 mainwnd.o: mainwnd.c
-	$(CC) -c mainwnd.c $(CFLAGS) $(LDFLAGS) $(LDFLAGS3)
+	$(CC) -c mainwnd.c $(CFLAGS) $(LDFLAGS)
 
 clean:
 	rm -rf *.o bin/ mainWnd.glade~ libtlen.so
