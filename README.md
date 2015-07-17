@@ -5,7 +5,7 @@ This application created tlenization images<br>
 Tlenitel 2000 difficult to find images in google search.
 
 Dependencies:<br>
-<b>Ubuntu</b>
+<b>Ubuntu (x86, x86_64), LUbuntu (ARM A20)</b>
 ````
 apt install libopencv-dev libgtk-3-dev
 ````

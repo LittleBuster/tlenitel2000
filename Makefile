@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-O3 -Wall -I. -L. -Wno-deprecated-declarations -fopenmp
 LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
-LDFLAGS2=-lopencv_core
+LDFLAGS2=-lopencv_core -lopencv_highgui
 
 all: tlenitel
 
