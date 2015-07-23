@@ -9,6 +9,10 @@ Dependencies:<br>
 ````
 apt install libopencv-dev libgtk-3-dev
 ````
+<b>Fedora</b>
+````
+dnf install gtk3-devel opencv-devel
+````
 <br>
 <img width="450" src="http://s018.radikal.ru/i509/1507/ca/bf845b029766.png" />
 
