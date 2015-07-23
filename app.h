@@ -14,9 +14,13 @@
 
 
 struct application_t {
-	struct main_window mw;
+	struct main_window *mw;
 };
 
+struct application_t *application_new(void);
+
 void application_start(struct application_t *app, int argc, char **argv);
+
+void application_destroy(struct application_t *app);
 
 #endif

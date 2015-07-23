@@ -17,29 +17,34 @@
 
 
 /* Main window signals */
-static void main_window_destroy(GtkWidget *w, gpointer data);
+static void main_window_on_destroy(GtkWidget *w, gpointer data);
 static void button_tlen_click(GtkWidget *w, gpointer data);
 static void button_open_img_click(GtkWidget *w, gpointer data);
 static void button_open_out_click(GtkWidget *w, gpointer data);
 static void adj_change(GtkAdjustment *w, gpointer data);
 
 /* Tlenization library function */
-void (*tlen_image)(const char *in_file, const char *templ_file, const char *result_file, double level);
+void (*tlen_image)(const char *in_file, const char *templ_file,
+										const char *result_file, double level);
 
 /* All application dialogs */
-static void show_dialog(GtkWidget *parent, const char *title, const char *text, int type)
+static void show_dialog(GtkWidget *parent, const char *title, const char *text,
+																	int type)
 {
 	GtkWidget *dialog = NULL;
-	dialog = gtk_message_dialog_new(GTK_WINDOW(parent), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-																		type, GTK_BUTTONS_OK, "%s", text);
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent), GTK_DIALOG_MODAL
+											| GTK_DIALOG_DESTROY_WITH_PARENT,
+											type, GTK_BUTTONS_OK, "%s", text);
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
 
-void main_window_init(struct main_window *mw)
+struct main_window *main_window_new(void)
 {
 	int w, h;
+	struct main_window *mw = NULL;
+	mw = (struct main_window *)malloc(sizeof(struct main_window));
 
 	omp_set_num_threads(2);
 	#pragma omp parallel sections
@@ -57,27 +62,40 @@ void main_window_init(struct main_window *mw)
 			/* Load main window from glade file */
 			mw->wnd = GTK_WIDGET(gtk_builder_get_object(mw->builder, "window1"));
 			gtk_window_get_size(GTK_WINDOW(mw->wnd), &w, &h);
-			gtk_window_move(GTK_WINDOW(mw->wnd), gdk_screen_width() / 2 - w / 2, gdk_screen_height() / 2 - h / 2);
-			g_signal_connect(G_OBJECT(mw->wnd), "destroy", G_CALLBACK(main_window_destroy), (gpointer)mw);
+			gtk_window_move(GTK_WINDOW(mw->wnd), gdk_screen_width() / 2 - w / 2,
+												gdk_screen_height() / 2 - h / 2);
+			g_signal_connect(G_OBJECT(mw->wnd), "destroy",
+									G_CALLBACK(main_window_on_destroy), NULL);
 
-			mw->e_open_img = GTK_ENTRY(gtk_builder_get_object(mw->builder, "eOpenImg"));
-			mw->e_open_out = GTK_ENTRY(gtk_builder_get_object(mw->builder, "eOpenOut"));
-			mw->e_level = GTK_ENTRY(gtk_builder_get_object(mw->builder, "eLevel"));
+			mw->e_open_img = GTK_ENTRY(gtk_builder_get_object(mw->builder,
+																	"eOpenImg"));
+			mw->e_open_out = GTK_ENTRY(gtk_builder_get_object(mw->builder,
+																	"eOpenOut"));
+			mw->e_level = GTK_ENTRY(gtk_builder_get_object(mw->builder,
+																	"eLevel"));
 			mw->i_main = GTK_IMAGE(gtk_builder_get_object(mw->builder, "iMain"));
 
-			mw->adj_val = GTK_ADJUSTMENT(gtk_builder_get_object(mw->builder, "adjVal"));
-			g_signal_connect(G_OBJECT(mw->adj_val), "value-changed", G_CALLBACK(adj_change), (gpointer)mw);
+			mw->adj_val = GTK_ADJUSTMENT(gtk_builder_get_object(mw->builder,
+																	"adjVal"));
+			g_signal_connect(G_OBJECT(mw->adj_val), "value-changed",
+			 							G_CALLBACK(adj_change), (gpointer)mw);
 
-			mw->b_open_img = GTK_WIDGET(gtk_builder_get_object(mw->builder, "bOpenImg"));
-			g_signal_connect(G_OBJECT(mw->b_open_img), "clicked", G_CALLBACK(button_open_img_click), (gpointer)mw);
+			mw->b_open_img = GTK_WIDGET(gtk_builder_get_object(mw->builder,
+																"bOpenImg"));
+			g_signal_connect(G_OBJECT(mw->b_open_img), "clicked",
+							G_CALLBACK(button_open_img_click), (gpointer)mw);
 
-			mw->b_open_out = GTK_WIDGET(gtk_builder_get_object(mw->builder, "bOpenOut"));
-			g_signal_connect(G_OBJECT(mw->b_open_out), "clicked", G_CALLBACK(button_open_out_click), (gpointer)mw);
+			mw->b_open_out = GTK_WIDGET(gtk_builder_get_object(mw->builder,
+																	"bOpenOut"));
+			g_signal_connect(G_OBJECT(mw->b_open_out), "clicked",
+			 					G_CALLBACK(button_open_out_click), (gpointer)mw);
 
 			mw->b_tlen = GTK_WIDGET(gtk_builder_get_object(mw->builder, "bTlen"));
-			g_signal_connect(G_OBJECT(mw->b_tlen), "clicked", G_CALLBACK(button_tlen_click), (gpointer)mw);
+			g_signal_connect(G_OBJECT(mw->b_tlen), "clicked",
+									G_CALLBACK(button_tlen_click), (gpointer)mw);
 		}
 	}
+	return mw;
 }
 
 void main_window_show(struct main_window *mw)
@@ -86,17 +104,16 @@ void main_window_show(struct main_window *mw)
 }
 
 /* Free memory */
-void main_window_release(struct main_window *mw)
+void main_window_destroy(struct main_window *mw)
 {
 	dlclose(mw->handle);
 	gtk_widget_destroy(mw->wnd);
-	gtk_main_quit();
+	free(mw);
 }
 
-static void main_window_destroy(GtkWidget *w, gpointer data)
+static void main_window_on_destroy(GtkWidget *w, gpointer data)
 {
-	struct main_window *mw = data;
-	main_window_release(mw);
+	gtk_main_quit();
 }
 
 static void button_tlen_click(GtkWidget *w, gpointer data)
@@ -110,17 +127,26 @@ static void button_tlen_click(GtkWidget *w, gpointer data)
 	sscanf(level, "%lf", &val);
 
 	if (!strcmp(in_text, "")) {
-		show_dialog(mw->wnd, "Warning!", "Выберите изображение!", GTK_MESSAGE_WARNING);
+		show_dialog(mw->wnd, "Warning!", "Выберите изображение!",
+															GTK_MESSAGE_WARNING);
 		return;
 	}
 
 	if (!strcmp(out_text, "")) {
-		show_dialog(mw->wnd, "Warning!", "Выберите файл для сохранения!", GTK_MESSAGE_WARNING);
+		show_dialog(mw->wnd, "Warning!", "Выберите файл для сохранения!",
+															GTK_MESSAGE_WARNING);
+		return;
+	}
+
+	if (strlen(level) > 10) {
+		show_dialog(mw->wnd, "Warning!", "Слишком длинный уровень тленизайии!",
+															GTK_MESSAGE_WARNING);
 		return;
 	}
 
 	if (val == 0.0f) {
-		show_dialog(mw->wnd, "Warning!", "Укажите уровень тленизации", GTK_MESSAGE_WARNING);
+		show_dialog(mw->wnd, "Warning!", "Укажите уровень тленизации",
+															GTK_MESSAGE_WARNING);
 		return;
 	}
 
@@ -154,12 +180,12 @@ static void button_open_img_click(GtkWidget *w, gpointer data)
 /* Tlenization level change */
 static void adj_change(GtkAdjustment *w, gpointer data)
 {
-	char text[100];
+	char text[10];
 	struct main_window *mw = data;
 
 	double val = gtk_adjustment_get_value(w);
 
-	memset(text, 0x00, 100);
+	memset(text, 0x00, 10);
 	sprintf(text, "%f", val);
 	gtk_entry_set_text(mw->e_level, text);
 }

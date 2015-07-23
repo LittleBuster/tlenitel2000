@@ -22,14 +22,14 @@ struct main_window {
 	GtkEntry *e_open_out;
 	GtkEntry *e_level;
 	GtkImage *i_main;
-	GtkAdjustment *adj_val;	
+	GtkAdjustment *adj_val;
 	void *handle;
 };
 
-void main_window_init(struct main_window *mw);
+struct main_window *main_window_new(void);
 
 void main_window_show(struct main_window *mw);
 
-void main_window_release(struct main_window *mw);
+void main_window_destroy(struct main_window *mw);
 
 #endif
